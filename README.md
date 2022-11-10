@@ -1,1 +1,2 @@
-# BambooStore
+# BambooStore  
+Семестровая работа на Flask с тематикой: магазин манги
