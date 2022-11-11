@@ -1,0 +1,17 @@
+body{
+    background:url(assets/background.jpg) no-repeat center center fixed;
+    min-height:100vh;
+    background-size: cover;
+    overflow: hidden;
+}
+nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    position: fixed;
+    width: 100%;
+}
+.col{
+    display: flex;
+    gap: 20px;
+}

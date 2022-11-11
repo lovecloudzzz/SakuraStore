@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header class="header">
+        <nav>
+            <column class="col">
+                <img class="picture" href="/main" src="/static/css/assets/manga.png" style="width: 50px">
+            </column>
+            <column class="col">
+                <el class="picture"><img class="picture" href="/cart" src="/static/css/assets/cart.png" style="width: 50px"></el>
+                <el class="picture"><img class="picture" href="/favorites" src="/static/css/assets/favorites.png" style="width: 50px"></el>
+                <el class="picture"><img class="picture" href="/orders" src="/static/css/assets/orders.png" style="width: 50px"></el>
+            </column>
+            <column class="col">
+                <el class="reg"><img class="picture" href="/registration" src="/static/css/assets/registration.png" style="width: 50px"></el>
+                <el class="login"><img class="picture" href="/login" src="/static/css/assets/login.png" style="width: 50px"></el>
+                <el class="picture"><img class="picture" href="/profile" src="/static/css/assets/avatar.png" style="width: 50px"></el>
+            </column>
+        </nav>
+    </header>
+    <main class="main"></main>
+{% block body %}
+{% endblock %}
+<script src="/static/js/scripts.js"></script>
+</body>
+</html>
