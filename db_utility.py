@@ -2,6 +2,8 @@ import psycopg2
 
 
 class BaseDB:
+    def __init__(self):
+        pass
     con = psycopg2.connect(
         dbname="postgres",
         user="postgres",
@@ -14,7 +16,6 @@ class BaseDB:
 
 
 class UserDB(BaseDB):
-
     @classmethod
     def register_user(cls, login, email, password):
         UserDB.cur.execute(
@@ -23,42 +24,19 @@ class UserDB(BaseDB):
 
     @classmethod
     def get_user_by_id(cls, id):
-        UserDB.cur.execute("SELECT * from users WHERE id = '{id}'")
+        UserDB.cur.execute(f"SELECT * from users WHERE id = {id}")
+        return UserDB.cur.fetchone()
+
+    @classmethod
+    def get_user_by_login(cls, login):
+        UserDB.cur.execute("SELECT * from users WHERE login = '%s'" % login)
         return UserDB.cur.fetchone()
 
     @classmethod
     def get_user_by_email(cls, email):
-        UserDB.cur.execute("SELECT * from users WHERE email = '{email}'")
+        UserDB.cur.execute("SELECT * FROM users WHERE email = '%s'" % email)
         return UserDB.cur.fetchone()
 
-
-    def fromDB(self, user_id, db):
-        self.__user = UserDB.get_user_by_id(user_id)
-        return self
-
-    def create(self, user):
-        self.__user = user
-        return self
-
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
-
-    @property
-    def get_id(self):
-        return str(self.__user[0])
-
-    @property
-    def is_admin(self):
-        return self.__user[4]
 
 class ProductDB(BaseDB):
     @classmethod
@@ -132,3 +110,31 @@ class OrdersProductsDB(BaseDB):
     def get_favorite_by_id(cls, id):
         OrdersProductsDB.cur.execute("SELECT * from orders_products WHERE id = '{id}'")
         return OrdersProductsDB.cur.fetchone()
+
+class UserLogin:
+    def fromDB(self, user_id):
+        self.__user = UserDB.get_user_by_id(user_id)
+        return self
+
+    def create(self, user):
+        self.__user = user
+        return self
+
+    def get_id(self):
+        return str(self.__user[0])
+
+    @property
+    def is_authenticated(self):
+        return True if self.__user[0] else False
+
+    @property
+    def is_active(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    @property
+    def is_admin(self):
+        return self.__user[4]

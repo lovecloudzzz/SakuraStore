@@ -15,15 +15,21 @@
             <a href="/" class=""><img class="picture" href="/" src="/static/css/assets/manga.png"></a>
         </div>
         <div class="col">
-            <a class="" href="/cart"><img class="picture"  src="/static/css/assets/cart.png"></a>
-            <a class="" href="/favorites"><img class="picture" src="/static/css/assets/favorites.png"></a>
-            <a class="" href="/orders"><img class="picture" src="/static/css/assets/orders.png"></a>
+            {% if current_user.is_authenticated %}
+                <a class="" href="/cart"><img class="picture"  src="/static/css/assets/cart.png"></a>
+                <a class="" href="/favorites"><img class="picture" src="/static/css/assets/favorites.png"></a>
+                <a class="" href="/orders"><img class="picture" src="/static/css/assets/orders.png"></a>
+            {% endif %}
         </div>
         <div class="col">
-            <a class="" href="/registration"><img class="picture" src="/static/css/assets/registration.png"></a>
-            <a class="" href="/login"><img class="picture" src="/static/css/assets/login.png"></a>
-            <a class="" href="/profile"><img class="picture" src="/static/css/assets/avatar.png"></a>
-            <a class="" href="/profile"><img class="picture" src="/static/css/assets/logout.png"></a>
+            {% if current_user.is_anonymous %}
+                <a class="" href="/registration"><img class="picture" src="/static/css/assets/registration.png"></a>
+                <a class="" href="/login"><img class="picture" src="/static/css/assets/login.png"></a>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+                <a class="" href="/profile"><img class="picture" src="/static/css/assets/avatar.png"></a>
+                <a class="" href="{{ url_for("logout") }}"><img class="picture" src="/static/css/assets/logout.png"></a>
+            {% endif %}
         </div>
     </div>
 </header>
