@@ -1,1 +1,13 @@
 {% extends 'base.html'%}
+{% block body %}
+    <main>
+        <div class="cl">
+            <form method="post">
+                Логин<input type="text" class="box" id="login" name="login" value="{{ login }}">
+                Почта<input type="text" class="box" id="email" name="email" value="{{ email }}">
+                Пароль<input type="text" class="box" id="password" name="password" value="{{ password }}">
+                <button class="box" type="submit"> Сохранить изменения </button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

@@ -13,6 +13,9 @@
     <div class="navbar">
         <div class="col">
             <a href="/" class=""><img class="picture" href="/" src="/static/css/assets/manga.png"></a>
+            {% if current_user.is_admin %}
+                <a href="/add_manga" class=""><img class="picture" href="/" src="/static/css/assets/addmanga.png"></a>
+            {% endif %}
         </div>
         <div class="col">
             {% if current_user.is_authenticated %}
@@ -35,6 +38,7 @@
 </header>
 {% block body %}
 {% endblock %}
+<script src="http://code.jquery.com/jquery-3.2.1.js"></script>
 <script src="/static/js/scripts.js"></script>
 </body>
 </html>

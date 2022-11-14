@@ -1,0 +1,13 @@
+{% extends 'base.html'%}
+{% block body %}
+    <main>
+        <form class="reg_form" method="post">
+            <input type="text" class="box" id="title" name="title" placeholder="Название">
+            <input type="text" class="box" id="annotation" name="annotation" placeholder="Описание">
+            <input type="text" class="box" id="tags" name="tags" placeholder="{тег,тег}">
+            <input type="text" class="box" id="banner_link" name="banner_link" placeholder="Название картинки">
+            <input type="text" class="box" id="price" name="price" placeholder="Цена">
+            <button class="box" type="submit">Добавить</button>
+        </form>
+    </main>
+{% endblock %}

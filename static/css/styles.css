@@ -1,12 +1,10 @@
 html *
 {
-   font-size: 1em !important;
    font-family: Caveat !important;
 }
 body{
     background:url(assets/background.jpg) no-repeat center center fixed;
     background-size: cover;
-    overflow: hidden;
 }
 header{
     display: flex;
@@ -55,4 +53,72 @@ form{
 }
 textarea:focus, input:focus{
     outline: none;
+}
+.main_page{
+    display: flex;
+    flex-direction: row;
+}
+aside{
+    min-width: 200px;
+    height: 100%;
+}
+.side{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+}
+.cards{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: flex-start;
+}
+.card{
+    background: rgb(255, 183, 197, 0.5);
+    border-radius: 45px;
+    display: flex;
+    width: 240px;
+    flex-direction: column;
+    overflow: hidden;
+}
+.card:hover{
+    height: auto;
+}
+.card_title{
+    text-align: center;
+    font-size: 25px;
+}
+.card_img{
+    width: 200px;
+}
+.card_tags{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    padding-left: 10px;
+    text-align: center;
+}
+.card_tag{
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    font-size: 10px;
+}
+.card_annotation{
+    padding-left: 10px;
+    height: 100px;
+    font-size: 10px;
+    overflow: hidden;
+}
+.card_annotation:hover{
+    height: auto;
+    overflow: inherit;
+}
+
+.card_buttons{
+    text-align: center;
+    margin-top: auto;
+}
+.card_buttons:hover{
+    height: auto;
 }

@@ -1,1 +1,69 @@
 {% extends 'base.html'%}
+{% block body %}
+    <main>
+        <div class="main_page">
+            <aside>
+                <div class="side">
+                    <a> dsadsada</a>
+                    <a> dsadsada</a>
+                    <a> dsadsada</a>
+                </div>
+            </aside>
+            <div class="cards">
+                {% for product in products %}
+                    <div class="card" id="{{ product[0] }}">
+                        <a class="card_title">{{ product[1] }}</a>
+                        <a style="text-align: center"><img class="card_img" src="/static/css/assets/{{ product[4] }}.jpg" alt=""></a>
+                        <a class="card_tags">
+                            {% for tag in product[3] %}
+                                <div class="card_tag">{{ tag }}</div>
+                            {% endfor %}
+                        </a>
+                        <a class="card_annotation">
+                            {{ product[2] }}
+                        </a>
+                        <div class="card_buttons" style="padding-top: 10px">
+                            <button class="card_favorite" id="fav{{ product[0] }}" type="submit"></button>
+                            <button class="card_cart" id="cart{{ product[0] }}" type="submit"></button>
+                        </div>
+                        <a style="text-align: center">{{ product[5] }}</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    <script>
+        $('[id^=fav]').on('click', function () {
+            let data = $(this).id
+            $.ajax({
+                url: '{{ url_for('registration') }}',
+                method: 'get',
+                dataType: 'html',
+                data: data,
+                success: function (data) {
+                    data = JSON.parse(data)
+                    $('#film_name').html(data['film_name'])
+                    $('#film_rating').html(Math.floor(5 * Math.random()))
+                    $('#film_country').html(data['film_country'])
+                }
+            })
+        })
+    </script>
+    <script>
+        $('[id^=cart]').on('click', function () {
+            let data = $(this).id
+            $.ajax({
+                url: '{{ url_for('registration') }}',
+                method: 'get',
+                dataType: 'html',
+                data: data,
+                success: function (data) {
+                    data = JSON.parse(data)
+                    $('#film_name').html(data['film_name'])
+                    $('#film_rating').html(Math.floor(5 * Math.random()))
+                    $('#film_country').html(data['film_country'])
+                }
+            })
+        })
+    </script>
+    </main>
+{% endblock %}

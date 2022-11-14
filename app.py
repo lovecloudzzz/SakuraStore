@@ -22,19 +22,47 @@ def logout():
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    user_id = None if current_user.is_anonymous else current_user.get_id()
+    products = ProductDB.all_products()
     context = {
         'title': 'SakuraStore',
-        'products': ProductDB.all_products()
+        'products': products
     }
+    return render_template('main.html', **context)
+
+@login_required
+@app.route('/add_manga', methods=['GET', 'POST'])
+def add_manga():
+    context = {
+        'title': 'Добавить мангу',
+    }
+    is_admin = current_user.is_admin
+    if is_admin:
+        if request.method == 'POST':
+            title = request.form.get('title')
+            annotation = request.form.get('annotation')
+            tags = request.form.get('tags')
+            price = request.form.get('price')
+            banner_link = request.form.get('banner_link')
+            ProductDB.add_product(title,annotation,tags,banner_link,price)
+            return redirect(url_for('add_manga'))
+        else:
+            return render_template('add_manga.html', **context)
     return render_template('main.html', **context)
 
 
 @login_required
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
+    if request.method == 'POST':
+        login = request.form.get('login')
+        password = request.form.get('password')
+        UserDB.update(current_user.get_id(), login, password)
+    user = UserDB.get_user_by_id(current_user.get_id())
     context = {
-        'title': 'Профиль'
+        'title': 'Профиль',
+        'login': user[1],
+        'email': user[2],
+        'password': user[3]
     }
     return render_template("profile.html", **context)
 
@@ -45,12 +73,13 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
         user = UserDB.get_user_by_email(email)
-        if user[2] == email and user[3] == password:
-            user_login = UserLogin().create(user)
-            login_user(user_login, remember=False)
-            return redirect('/')
-        else:
-            print("Неверные данные")
+        if user:
+            if user[2] == email and user[3] == password:
+                user_login = UserLogin().create(user)
+                login_user(user_login, remember=False)
+                return redirect('/')
+            else:
+                message = "Wrong username or password"
     context = {
         'title': 'Вход'
     }
