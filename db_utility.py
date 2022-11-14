@@ -8,7 +8,6 @@ class BaseDB:
         dbname="postgres",
         user="postgres",
         password="",
-        password="Neonsova666",
         host="localhost",
         port=5432
     )
