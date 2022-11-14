@@ -4,10 +4,13 @@
         <div class="main_page">
             <aside>
                 <div class="side">
-                    <a style="font-size: 20px"> Жанры</a>
-                    {% for tag in tags %}
-                        <a style="font-size: 15px"> {{ tag }} </a>
-                    {% endfor %}
+                    <a style="font-size: 20px; padding-left: 20px"> Жанры</a>
+                    <form method="post" style="display: flex; flex-direction: column; gap: 5px">
+                        {% for tag in tags %}
+                            <label style="font-size: 15px; background: rgba(243,182,255,0.7); width: auto" class="card_tag">{{ tag }}<input type="checkbox" id="{{ tag }}"></label>
+                        {% endfor %}
+                        <button type="submit">Выбрать</button>
+                    </form>
                 </div>
             </aside>
             <div class="cards">
