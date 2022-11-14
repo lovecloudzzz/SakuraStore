@@ -4,9 +4,10 @@
         <div class="main_page">
             <aside>
                 <div class="side">
-                    <a> dsadsada</a>
-                    <a> dsadsada</a>
-                    <a> dsadsada</a>
+                    <a style="font-size: 20px"> Жанры</a>
+                    {% for tag in tags %}
+                        <a style="font-size: 15px"> {{ tag }} </a>
+                    {% endfor %}
                 </div>
             </aside>
             <div class="cards">
@@ -22,10 +23,12 @@
                         <a class="card_annotation">
                             {{ product[2] }}
                         </a>
-                        <div class="card_buttons" style="padding-top: 10px">
-                            <button class="card_favorite" id="fav{{ product[0] }}" type="submit"></button>
-                            <button class="card_cart" id="cart{{ product[0] }}" type="submit"></button>
-                        </div>
+                        {% if current_user.is_authenticated %}
+                            <div class="card_buttons" style="padding-top: 10px">
+                                <button class="card_favorite" id="fav{{ product[0] }}" type="submit"><img src="/static/css/assets/addtofavorites.png" style="width: 30px"></button>
+                                <button class="card_cart" id="cart{{ product[0] }}" type="submit"></button>
+                            </div>
+                        {% endif %}
                         <a style="text-align: center">{{ product[5] }}</a>
                     </div>
                 {% endfor %}
@@ -33,34 +36,30 @@
         </div>
     <script>
         $('[id^=fav]').on('click', function () {
-            let data = $(this).id
+            let id = this.id.replace('fav', '')
+            var data = {}
             $.ajax({
-                url: '{{ url_for('registration') }}',
+                url: '{{ url_for('add_to_fav', id = -1) }}'.replace('-1', id),
                 method: 'get',
                 dataType: 'html',
                 data: data,
                 success: function (data) {
                     data = JSON.parse(data)
-                    $('#film_name').html(data['film_name'])
-                    $('#film_rating').html(Math.floor(5 * Math.random()))
-                    $('#film_country').html(data['film_country'])
                 }
             })
         })
     </script>
     <script>
         $('[id^=cart]').on('click', function () {
-            let data = $(this).id
+            let id = this.id.replace('cart', '')
+            var data = {}
             $.ajax({
-                url: '{{ url_for('registration') }}',
+                url: '{{ url_for('add_to_cart', id = -1) }}'.replace('-1', id),
                 method: 'get',
                 dataType: 'html',
                 data: data,
                 success: function (data) {
                     data = JSON.parse(data)
-                    $('#film_name').html(data['film_name'])
-                    $('#film_rating').html(Math.floor(5 * Math.random()))
-                    $('#film_country').html(data['film_country'])
                 }
             })
         })

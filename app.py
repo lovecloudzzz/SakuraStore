@@ -22,12 +22,34 @@ def logout():
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
+    tags = ['cёнен', 'cэйнен', 'комедия', 'романтика', 'школа', 'военное', 'драма',
+            'магия', 'космос', 'приключения', 'фантастика', 'фэнтези']
     products = ProductDB.all_products()
     context = {
         'title': 'SakuraStore',
-        'products': products
+        'products': products,
+        'tags': tags
     }
     return render_template('main.html', **context)
+
+
+@app.route('/add_to_fav/<int:id>', methods=['get'])
+def add_to_fav(id):
+    product_id = id
+    user_id = current_user.get_id()
+    CartDB.add_to_cart(user_id, product_id)
+    return
+
+@app.route('/add_to_cart/<int:id>', methods=['get'])
+def add_to_cart():
+    product_id = 1
+    product_id = id
+    user_id = current_user.get_id()
+    if FavoritesDB.check(user_id, product_id):
+         pass
+    else:
+        FavoritesDB.add_favorite(user_id, product_id)
+    return {'img': '/static/css/assets/addedtofavorites'}
 
 @login_required
 @app.route('/add_manga', methods=['GET', 'POST'])
@@ -47,7 +69,7 @@ def add_manga():
             return redirect(url_for('add_manga'))
         else:
             return render_template('add_manga.html', **context)
-    return render_template('main.html', **context)
+    return redirect(url_for('main'))
 
 
 @login_required

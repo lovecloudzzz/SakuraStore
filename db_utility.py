@@ -7,7 +7,6 @@ class BaseDB:
     con = psycopg2.connect(
         dbname="postgres",
         user="postgres",
-        password="",
         host="localhost",
         port=5432
     )
@@ -72,6 +71,11 @@ class ProductDB(BaseDB):
 
 
 class FavoritesDB(BaseDB):
+    @classmethod
+    def check(cls,user_id, product_id):
+        FavoritesDB.cur.execute("SELECT * from favorites WHERE user_id = '%s' and product_id = '%s'" % (user_id, product_id))
+        return bool(FavoritesDB.cur.fetchone())
+
     @classmethod
     def all_favorites(cls, id):
         FavoritesDB.cur.execute("SELECT * from favorites WHERE user_id = '%s'" % id)
