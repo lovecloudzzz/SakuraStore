@@ -11,7 +11,8 @@
                         {% for product in order[1] %}
                                 <div class="order_product">
                                     <a class="order_product_title">{{ product[0] }}</a>
-                                    <a class="order_product_price">{{ product[1] }}</a>
+                                    <a style="text-align: center"><img src="/static/css/assets/{{ product[1] }}.jpg" class="order_product_banner"></a>
+                                    <a class="order_product_price">{{ product[2] }}</a>
                                 </div>
                         {% endfor %}
                         </div>

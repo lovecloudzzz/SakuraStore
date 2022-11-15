@@ -156,7 +156,13 @@ aside{
 }
 .order_product{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 10px;
     flex-wrap: wrap;
+}
+.order_product_price{
+    text-align: center;
+}
+.order_product_banner{
+    width: 110px;
 }

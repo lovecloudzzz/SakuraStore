@@ -149,11 +149,11 @@ class OrdersProductsDB(BaseDB):
         for order in orders:
             summa = 0
             OrdersProductsDB.cur.execute(
-                "SELECT title, price  FROM products JOIN (SELECT product_id, order_id FROM orders_products) op ON op.product_id = products.id WHERE order_id = %s" % order[0]
+                "SELECT title, banner_link, price  FROM products JOIN (SELECT product_id, order_id FROM orders_products) op ON op.product_id = products.id WHERE order_id = %s" % order[0]
             )
             products = OrdersProductsDB.cur.fetchall()
             for product in products:
-                summa += product[1]
+                summa += product[2]
             res.append(tuple((order[0], products, summa)))
         print(res)
         return res
