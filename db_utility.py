@@ -8,7 +8,6 @@ class BaseDB:
         dbname="postgres",
         user="postgres",
         password="",
-        password="Neonsova666",
         host="localhost",
         port=5432
     )
@@ -52,8 +51,17 @@ class UserDB(BaseDB):
 
 class ProductDB(BaseDB):
     @classmethod
+    def update(cls,id,title,annotation,tags,price):
+        UserDB.cur.execute("UPDATE prodicts SET title='%s', annotation='%s', tags='%s', price='%s' WHERE id='%s'" % (title, annotation, tags, price, id))
+
+    @classmethod
     def all_products(cls):
         ProductDB.cur.execute("SELECT * from products")
+        return ProductDB.cur.fetchall()
+
+    @classmethod
+    def products_by_tags(cls, products_tags):
+        ProductDB.cur.execute("SELECT * from products where '%s' && tags" % products_tags)
         return ProductDB.cur.fetchall()
 
     @classmethod
@@ -75,32 +83,31 @@ class ProductDB(BaseDB):
 class FavoritesDB(BaseDB):
     @classmethod
     def check(cls,user_id, product_id):
-        FavoritesDB.cur.execute("SELECT * from favorites WHERE user_id = '%s' and product_id = '%s'" % (user_id, product_id))
-        return bool()
-
-    @classmethod
-    def all_favorites(cls, id):
-        FavoritesDB.cur.execute("SELECT * from favorites WHERE user_id = '%s'" % id)
-        return FavoritesDB.cur.fetchall()
+        res = FavoritesDB.cur.execute("SELECT * from favorites WHERE user_id = '%s' and product_id = '%s'" % (user_id, product_id))
+        return bool(res.cur.fetchone())
 
     @classmethod
     def add_favorite(cls, user_id, product_id):
         FavoritesDB.cur.execute("INSERT INTO favorites (user_id, product_id) VALUES (%s, %s)" % (user_id, product_id))
 
     @classmethod
-    def remove_favorite(cls, user_id, product_id):
+    def remove_favorite(cls, product_id):
+        FavoritesDB.cur.execute("DELETE FROM favorites WHERE product_id = '%s'" % product_id)
+
+    @classmethod
+    def remove_one_favorite(cls, user_id, product_id):
         FavoritesDB.cur.execute("DELETE FROM favorites WHERE user_id = '%s' and product_id = '%s'" % (user_id, product_id))
 
     @classmethod
-    def get_all_favourites(cls, user_id):
-        ProductDB.cur.execute("SELECT id, title, annotation FROM products JOIN favorites as f ON products.id = f.product_id WHERE user_id = %'s'" % user_id)
-        return FavoritesDB.cur.fetchall()
+    def get_all_favorites(cls, user_id):
+        ProductDB.cur.execute("SELECT * FROM products JOIN favorites as f ON products.id = f.product_id WHERE user_id = '%s'" % user_id)
+        return ProductDB.cur.fetchall()
 
 
 class CartDB(BaseDB):
     @classmethod
     def get_cart(cls, user_id):
-        CartDB.cur.execute("SELECT id, title, annotation FROM products JOIN carts as f ON products.id = f.product_id WHERE user_id = %'s'" % user_id)
+        CartDB.cur.execute("SELECT title, annotation, price FROM products JOIN carts as f ON products.id = f.product_id WHERE user_id = '%s'" % user_id)
         return CartDB.cur.fetchall()
 
     @classmethod
@@ -118,8 +125,8 @@ class CartDB(BaseDB):
 class OrdersDB(BaseDB):
     @classmethod
     def all_orders(cls, user_id):
-        return OrdersDB.cur.execute("SELECT (id) from orders where user_id = '%s'" % user_id).fetchall()
-
+        OrdersDB.cur.execute("SELECT id from orders where user_id = '%s'" % user_id)
+        return OrdersDB.cur.fetchall()
 
     @classmethod
     def new_order_id(cls):
@@ -133,19 +140,27 @@ class OrdersDB(BaseDB):
         for product in products:
             OrdersProductsDB.cur.execute("INSERT INTO orders_products (order_id, product_id) VALUES (%s, %s)" % (product[0], order_id))
         CartDB.clear_cart(user_id)
+
 class OrdersProductsDB(BaseDB):
     @classmethod
     def all_orders(cls, user_id):
         orders = OrdersDB.all_orders(user_id)
         res = []
         for order in orders:
+            summa = 0
             OrdersProductsDB.cur.execute(
-                "SELECT title, id, price  FROM products JOIN (SELECT product_id, order_id FROM orders_products) op ON op.product_id = products.id WHERE order_id = %s" % order[0]
+                "SELECT title, price  FROM products JOIN (SELECT product_id, order_id FROM orders_products) op ON op.product_id = products.id WHERE order_id = %s" % order[0]
             )
             products = OrdersProductsDB.cur.fetchall()
-            res.append(tuple((order[0], products)))
-
+            for product in products:
+                summa += product[1]
+            res.append(tuple((order[0], products, summa)))
+        print(res)
         return res
+
+    @classmethod
+    def delete_by_id(cls, user_id, product_id):
+        OrdersProductsDB.cur.execute("DELETE FROM orders_products (user_id, product_id) VALUES (%s, %s)" % (user_id, product_id))
 
 
 class UserLogin:
@@ -159,9 +174,6 @@ class UserLogin:
 
     def get_id(self):
         return str(self.__user[0])
-
-    def check_favorite(self, product_id):
-        return True if 1 else False ##### сделать
 
     @property
     def is_authenticated(self):

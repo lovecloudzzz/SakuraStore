@@ -1,1 +1,42 @@
 {% extends 'base.html'%}
+{% block body %}
+    <main>
+     <div class="main_page">
+         <div class="cards">
+              {% for product in products %}
+                    <div class="card" id="{{ product[0] }}">
+                        <a class="card_title">{{ product[1] }}</a>
+                        <a style="text-align: center"><img class="card_img" src="/static/css/assets/{{ product[4] }}.jpg" alt=""></a>
+                        <a class="card_tags">
+                            {% for tag in product[3] %}
+                                <div class="card_tag">{{ tag }}</div>
+                            {% endfor %}
+                        </a>
+                        <a class="card_annotation">
+                            {{ product[2] }}
+                        </a>
+                            <div class="card_buttons" style="padding-top: 10px">
+                                <button  class="box" style="width: auto; height: auto; background: rgba(255, 183, 197, 0.2)" id="del{{ product[0] }}" type="submit"><img src="/static/css/assets/dislike.png" style="width: 30px"></button>
+                            </div>
+                        <a style="text-align: center">{{ product[5] }}</a>
+                    </div>
+              {% endfor %}
+         </div>
+     </div>
+    <script>
+        $('[id^=del]').on('click', function () {
+            let id = this.id.replace('del', '')
+            var data = {}
+            $.ajax({
+                url: '{{ url_for('remove_fav', id = -1) }}'.replace('-1', id),
+                method: 'get',
+                dataType: 'html',
+                data: data,
+                success: function (data) {
+                    data = JSON.parse(data)
+                }
+            })
+        })
+    </script>
+    </main>
+{% endblock %}

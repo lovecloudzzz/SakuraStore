@@ -5,11 +5,11 @@
             <aside>
                 <div class="side">
                     <a style="font-size: 20px; padding-left: 20px"> Жанры</a>
-                    <form method="post" style="display: flex; flex-direction: column; gap: 5px">
+                    <form method="post" style="display: flex; flex-direction: column; gap: 5px;">
                         {% for tag in tags %}
-                            <label style="font-size: 15px; background: rgba(243,182,255,0.7); width: auto" class="card_tag">{{ tag }}<input type="checkbox" id="{{ tag }}"></label>
+                            <label style="font-size: 15px; background: rgba(243,182,255,0.7); width: auto; text-align: start; padding-left: 20px" class="card_tag">{{ tag }}<input type="checkbox" name="tag_filter" id="{{ tag }}" value="{{ tag }}"></label>
                         {% endfor %}
-                        <button type="submit">Выбрать</button>
+                        <button type="submit" class="box" style="width: auto; height: auto">Выбрать</button>
                     </form>
                 </div>
             </aside>
@@ -28,8 +28,12 @@
                         </a>
                         {% if current_user.is_authenticated %}
                             <div class="card_buttons" style="padding-top: 10px">
-                                <button class="card_favorite" id="fav{{ product[0] }}" type="submit"><img src="/static/css/assets/addtofavorites.png" style="width: 30px"></button>
-                                <button class="card_cart" id="cart{{ product[0] }}" type="submit"></button>
+                                <button  class="box" style="width: auto; height: auto; background: rgba(255, 183, 197, 0.2)" id="fav{{ product[0] }}" type="submit"><img src="/static/css/assets/addedtofavorites.png" style="width: 30px"></button>
+                                <button  class="box" style="width: auto; height: auto; background: rgba(255, 183, 197, 0.2)" id="cart{{ product[0] }}" type="submit"><img src="/static/css/assets/addtocart.png" style="width: 30px"></button>
+                                {% if current_user.is_admin %}
+                                    <button  class="box" style="width: auto; height: auto; background: rgba(255, 183, 197, 0.2)" id="del{{ product[0] }}" type="submit"><img src="/static/css/assets/delete.png" style="width: 30px"></button>
+                                   <a class="box" style="width: 54px; height: 58px; background: rgba(255, 183, 197, 0.2); text-align: center; padding: 25px 10px 10px 10px;"  href="/red_manga/{{ product[0] }}"><img src="/static/css/assets/edit.png" style="width: 30px"></a>
+                                {% endif %}
                             </div>
                         {% endif %}
                         <a style="text-align: center">{{ product[5] }}</a>
@@ -58,6 +62,21 @@
             var data = {}
             $.ajax({
                 url: '{{ url_for('add_to_cart', id = -1) }}'.replace('-1', id),
+                method: 'get',
+                dataType: 'html',
+                data: data,
+                success: function (data) {
+                    data = JSON.parse(data)
+                }
+            })
+        })
+    </script>
+    <script>
+        $('[id^=del]').on('click', function () {
+            let id = this.id.replace('del', '')
+            var data = {}
+            $.ajax({
+                url: '{{ url_for('delete_manga', id = -1) }}'.replace('-1', id),
                 method: 'get',
                 dataType: 'html',
                 data: data,

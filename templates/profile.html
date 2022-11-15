@@ -2,10 +2,10 @@
 {% block body %}
     <main>
         <div class="cl">
-            <form method="post">
-                Логин<input type="text" class="box" id="login" name="login" value="{{ login }}">
-                Почта<input type="text" class="box" id="email" name="email" value="{{ email }}">
-                Пароль<input type="text" class="box" id="password" name="password" value="{{ password }}">
+            <form method="post" onsubmit="checkProfForm(event)">
+                <label for="login">Логин</label><input type="text" class="box" id="login" name="login" value="{{ login }}">
+               <label for="email">Почта</label> <a class="box" style="text-align: start" id="email" name="email"> {{ email }} </a>
+                <label for="password">Пароль</label><input type="text" class="box" id="password" name="password" value="{{ password }}">
                 <button class="box" type="submit"> Сохранить изменения </button>
             </form>
         </div>

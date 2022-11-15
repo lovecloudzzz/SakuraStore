@@ -1,1 +1,23 @@
 {% extends 'base.html'%}
+{% block body %}
+    <main>
+        <div class="main_page">
+            <div class="orders">
+                {% for order in orders %}
+                    <div class="order">
+                        <a class="order_title">Заказ номер: {{ order[0] }}№</a>
+                        <a class="order_price">Полная стоимсоть: {{ order[2] }}</a>
+                        <div class="order_products">
+                        {% for product in order[1] %}
+                                <div class="order_product">
+                                    <a class="order_product_title">{{ product[0] }}</a>
+                                    <a class="order_product_price">{{ product[1] }}</a>
+                                </div>
+                        {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+{% endblock %}

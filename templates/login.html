@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 {% block body %}
     <main>
-        <form method="post">
+        <form method="post" onsubmit="checkLogForm(event)">
             <input type="text" class="box" id="email" name="email" placeholder="Email">
             <input type="text" class="box" id="password" name="password" placeholder="Пароль">
             <button class="box" type="submit">Войти</button>

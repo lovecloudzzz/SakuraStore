@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 {% block body %}
     <main>
-        <form class="reg_form" method="post">
+        <form class="reg_form" method="post" onsubmit="checkRegForm(event)">
             <input type="text" class="box" id="login" name="login" placeholder="Login">
             <input type="text" class="box" id="email" name="email" placeholder="mygmail@gmail.com">
             <input type="text" class="box" id="password" name="password" placeholder="Пароль">

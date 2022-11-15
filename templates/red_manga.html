@@ -1,0 +1,12 @@
+{% extends 'base.html'%}
+{% block body %}
+    <main>
+        <form class="reg_form" method="post">
+            <input type="text" class="box" id="title" name="title" value="{{ product[1] }}">
+            <input type="text" style="height: auto" class="box" id="annotation" name="annotation" value="{{ product[2] }}">
+            <input type="text" class="box" id="tags" name="tags" value="{{ product[3] }}">
+            <input type="text" class="box" id="price" name="price" value="{{ product[5] }}">
+            <button class="box" type="submit">Добавить</button>
+        </form>
+    </main>
+{% endblock %}
