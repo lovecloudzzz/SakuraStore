@@ -22,8 +22,8 @@ def logout():
 
 @app.route('/', methods=['GET', 'POST'])
 def main():
-    tags = ['cёнен', 'cэйнен', 'комедия', 'романтика', 'школа', 'военное', 'драма',
-            'магия', 'космос', 'приключения', 'фантастика', 'фэнтези']
+    tags = ['сёнен', 'cэйнен', 'комедия', 'романтика', 'школа', 'военное', 'драма',
+            'магия', 'космос', 'приключение', 'фантастика', 'фэнтези']
     products = ProductDB.all_products()
     if request.method == 'POST':
         products_tags = request.form.getlist('tag_filter')

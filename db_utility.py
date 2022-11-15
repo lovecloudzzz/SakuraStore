@@ -84,7 +84,7 @@ class FavoritesDB(BaseDB):
     @classmethod
     def check(cls,user_id, product_id):
         res = FavoritesDB.cur.execute("SELECT * from favorites WHERE user_id = '%s' and product_id = '%s'" % (user_id, product_id))
-        return bool(res.cur.fetchone())
+        return bool(FavoritesDB.cur.fetchone())
 
     @classmethod
     def add_favorite(cls, user_id, product_id):
