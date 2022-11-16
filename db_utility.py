@@ -79,7 +79,6 @@ class ProductDB(BaseDB):
         ProductDB.cur.execute("INSERT INTO products(title, annotation, tags, banner_link, price) VALUES (%s, %s, %s, %s, %s)", (title, annotation, tags, banner_link, price))
 
 
-
 class FavoritesDB(BaseDB):
     @classmethod
     def check(cls,user_id, product_id):
@@ -107,12 +106,12 @@ class FavoritesDB(BaseDB):
 class CartDB(BaseDB):
     @classmethod
     def get_cart(cls, user_id):
-        CartDB.cur.execute("SELECT title, annotation, price FROM products JOIN carts as f ON products.id = f.product_id WHERE user_id = '%s'" % user_id)
+        CartDB.cur.execute("SELECT title, banner_link, price, products.id FROM products JOIN carts as f ON products.id = f.product_id WHERE user_id = '%s'" % user_id)
         return CartDB.cur.fetchall()
 
     @classmethod
     def clear_cart(cls, user_id):
-        CartDB.cur.execute("DELETE FROM carts WHERE user_id = %s" % user_id)
+        CartDB.cur.execute("DELETE FROM carts WHERE user_id = '%s'" % user_id)
 
     @classmethod
     def add_to_cart(cls, user_id, product_id):
@@ -120,7 +119,13 @@ class CartDB(BaseDB):
 
     @classmethod
     def delete_from_cart(cls, user_id, product_id):
-        CartDB.cur.execute("DELETE FROM carts (user_id, product_id) VALUES (%s, %s)" % (user_id, product_id))
+        CartDB.cur.execute("DELETE FROM carts WHERE user_id = '%s' and product_id = '%s'" % (user_id, product_id))
+
+    @classmethod
+    def check_cart(cls, user_id):
+        CartDB.cur.execute("SELECT title, banner_link, price, products.id FROM products JOIN carts as f ON products.id = f.product_id WHERE user_id = '%s'" % user_id)
+        return bool(CartDB.cur.fetchall())
+
 
 class OrdersDB(BaseDB):
     @classmethod
@@ -130,16 +135,18 @@ class OrdersDB(BaseDB):
 
     @classmethod
     def new_order_id(cls):
-        return OrdersDB.cur.execute("SELECT id FROM orders ORDER BY id DESC").fetchone()[0] if OrdersDB.cur.execute("SELECT id FROM orders ORDER BY id DESC").fetchone()[0] != None else 1
+        OrdersDB.cur.execute("SELECT id FROM orders ORDER BY id DESC")
+        return OrdersDB.cur.fetchone()[0] + 1
 
     @classmethod
     def create_order(cls, user_id):
-        products = CartDB.get_cart()
-        order_id = OrdersDB.new_order_id() + 1
+        products = CartDB.get_cart(user_id)
+        order_id = OrdersDB.new_order_id()
         OrdersDB.cur.execute("INSERT INTO orders (user_id, id) VALUES (%s, %s)" % (user_id, order_id))
         for product in products:
-            OrdersProductsDB.cur.execute("INSERT INTO orders_products (order_id, product_id) VALUES (%s, %s)" % (product[0], order_id))
+            OrdersProductsDB.cur.execute("INSERT INTO orders_products (product_id, order_id) VALUES (%s, %s)" % (product[3], order_id))
         CartDB.clear_cart(user_id)
+
 
 class OrdersProductsDB(BaseDB):
     @classmethod

@@ -1,1 +1,28 @@
 {% extends 'base.html'%}
+{% block body %}
+    <main>
+        <div class="cart_page">
+            <div class="cart">
+                {% for product in products %}
+                    <div class="cart_product">
+                        <div class="cart_product_content">
+                            <div class="cart_product_title">
+                                {{ product[0] }}
+                            </div>
+                            <a> <img class="cart_product_banner" src="/static/css/assets/{{ product[1] }}.jpg"> </a>
+                            <div class="cart_product_price">
+                                {{ product[2] }}
+                            </div>
+                        </div>
+                        <div>
+                            <a class="box" style="width: 54px; height: 58px; background: rgba(255, 183, 197, 0.2); text-align: center; padding: 25px 10px 10px 10px;"  href="/remove_from_cart/{{ product[3] }}"><img src="/static/css/assets/removefromcart.png" style="width: 30px"></a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="">
+                <a class="box make_order" style="width: 54px; height: 58px; background: rgba(255, 183, 197, 0.2); text-align: center; padding: 100px 10px 10px 10px;"  href="/new_order/{{ user_id }}"><img src="/static/css/assets/neworder.png" style="width: 100px"></a>
+            </div>
+        </div>
+    </main>
+{% endblock %}

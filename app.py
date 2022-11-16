@@ -32,9 +32,7 @@ def main():
             for i in products_tags:
                 s += "" + str(i) + "" + ','
             s = s[:-1] + '}'
-            print(s, products_tags)
             products = ProductDB.products_by_tags(s)
-            print(products)
         else:
             products = ProductDB.all_products()
     context = {
@@ -199,9 +197,11 @@ def orders():
 def cart():
     user_id = current_user.get_id()
     products = CartDB.get_cart(user_id)
+    print(products, user_id)
     context = {
         'title': 'Корзина',
-        'products': products
+        'products': products,
+        'user_id': user_id
     }
     return render_template("cart.html", **context)
 
@@ -216,6 +216,22 @@ def favorites():
         'products': products
     }
     return render_template("favorites.html", **context)
+
+
+@login_required
+@app.route('/new_order/<int:id>', methods=['GET', 'POST'])
+def new_order(id):
+    if CartDB.check_cart(id):
+        OrdersDB.create_order(id)
+        return redirect(url_for('orders'))
+    return redirect(url_for('cart'))
+
+
+@login_required
+@app.route('/remove_from_cart/<int:id>', methods=['GET', 'POST'])
+def remove_from_cart(id):
+    CartDB.delete_from_cart(current_user.get_id(),id)
+    return redirect(url_for('cart'))
 
 
 if __name__ == '__main__':

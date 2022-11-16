@@ -166,3 +166,29 @@ aside{
 .order_product_banner{
     width: 110px;
 }
+.cart_page{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.cart{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.cart_product{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+    gap: 40px;
+}
+.cart_product_banner{
+    width: 140px;
+}
+.cart_product_content{
+    background: rgb(255, 183, 197, 0.5);
+    border-radius: 20px;
+    padding: 10px;
+}
